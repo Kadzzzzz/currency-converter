@@ -1,0 +1,25 @@
+<resources>
+    <style name="Base.Theme.Currencyconverter" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:statusBarColor">@color/primary</item>
+    </style>
+
+    <style name="Theme.Currencyconverter" parent="Base.Theme.Currencyconverter" />
+
+    <style name="KeypadButton" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="KeypadButtonAction" parent="KeypadButton">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+</resources>

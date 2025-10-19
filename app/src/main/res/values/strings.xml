@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Convertisseur de Devises</string>
+    <string name="convert">Convertir</string>
+    <string name="swap">Échanger</string>
+    <string name="delete">Supprimer</string>
+    <string name="clear">Effacer</string>
+    <string name="exchange_rate">Taux de change :</string>
+    <string name="last_update">Dernière mise à jour : %s</string>
+    <string name="tap_to_change">Appuyez pour changer</string>
+    <string name="error_network">Erreur de connexion Internet</string>
+    <string name="error_conversion">Erreur lors de la conversion</string>
+    <string name="error_loading">Chargement des taux…</string>
+    <string name="usd">Dollar américain</string>
+    <string name="eur">Euro</string>
+    <string name="gbp">Livre sterling</string>
+    <string name="jpy">Yen japonais</string>
+    <string name="cad">Dollar canadien</string>
+    <string name="aud">Dollar australien</string>
+    <string name="chf">Franc suisse</string>
+    <string name="cny">Yuan chinois</string>
+</resources>

@@ -1,15 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Convertisseur de Devises</string>
+
+    <!-- Actions -->
     <string name="convert">Convertir</string>
     <string name="swap">Échanger</string>
     <string name="delete">Supprimer</string>
     <string name="clear">Effacer</string>
+
+    <!-- Interface principale -->
     <string name="exchange_rate">Taux de change :</string>
     <string name="last_update">Dernière mise à jour : %s</string>
     <string name="tap_to_change">Appuyez pour changer</string>
+    <string name="settings">⚙️ Paramètres</string>
+
+    <!-- Picker de devises -->
+    <string name="select_source_currency">Sélectionner la devise source</string>
+    <string name="select_target_currency">Sélectionner la devise cible</string>
+
+    <!-- Erreurs -->
     <string name="error_network">Erreur de connexion Internet</string>
     <string name="error_conversion">Erreur lors de la conversion</string>
     <string name="error_loading">Chargement des taux…</string>
+
+    <!-- Devises -->
     <string name="usd">Dollar américain</string>
     <string name="eur">Euro</string>
     <string name="gbp">Livre sterling</string>
@@ -18,4 +32,19 @@
     <string name="aud">Dollar australien</string>
     <string name="chf">Franc suisse</string>
     <string name="cny">Yuan chinois</string>
+
+    <!-- Page Paramètres -->
+    <string name="settings_title">Paramètres</string>
+    <string name="dark_mode">🌙 Mode Sombre</string>
+    <string name="dark_mode_desc">Activer le thème sombre</string>
+    <string name="language">🌍 Langue</string>
+    <string name="language_desc">Choisir la langue de l\'application</string>
+    <string name="french">🇫🇷 Français</string>
+    <string name="english">🇬🇧 English</string>
+    <string name="about">ℹ️ À propos</string>
+    <string name="about_text">Currency Converter est une application simple et élégante pour convertir rapidement des devises.\n\nL\'application utilise des taux de change en temps réel pour vous fournir des conversions précises.\n\nVersion 1.0</string>
+    <string name="data_source">📊 Source des données</string>
+    <string name="data_source_desc">Les taux de change proviennent de :</string>
+    <string name="data_source_link">🔗 ExchangeRate-API\n(open.er-api.com)</string>
+    <string name="data_source_info">Les taux sont mis à jour quotidiennement et proviennent de sources financières fiables.</string>
 </resources>

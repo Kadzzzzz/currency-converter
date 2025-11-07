@@ -9,10 +9,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -36,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvFromFlag, tvFromCurrency, tvToFlag, tvToCurrency, tvToAmount;
     private EditText etFromAmount;
     private LinearLayout layoutFromCurrency, layoutToCurrency;
-    private FloatingActionButton fabSwap;
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
-    private Button btnDot, btnDelete, btnSwapKey, btnConvert;
+    private Button btnDot, btnDelete, btnSwap;
 
     private List<Currency> currencies;
     private Currency selectedFromCurrency;
@@ -51,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Appliquer les paramètres sauvegardés
+        SettingsActivity.applySettings(this);
+
         setContentView(R.layout.activity_main);
 
         Log.d(TAG, "onCreate: Starting application");
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         etFromAmount = findViewById(R.id.etFromAmount);
         layoutFromCurrency = findViewById(R.id.layoutFromCurrency);
         layoutToCurrency = findViewById(R.id.layoutToCurrency);
-        fabSwap = findViewById(R.id.fabSwap);
 
         btn0 = findViewById(R.id.btn0);
         btn1 = findViewById(R.id.btn1);
@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
         btn9 = findViewById(R.id.btn9);
         btnDot = findViewById(R.id.btnDot);
         btnDelete = findViewById(R.id.btnDelete);
-        btnSwapKey = findViewById(R.id.btnSwapKey);
-        btnConvert = findViewById(R.id.btnConvert);
+        btnSwap = findViewById(R.id.btnSwap);
 
         etFromAmount.setText(currentInput);
         tvToAmount.setText("0");
@@ -195,15 +194,16 @@ public class MainActivity extends AppCompatActivity {
         btnDot.setOnClickListener(numberClickListener);
 
         btnDelete.setOnClickListener(v -> deleteLastCharacter());
-        btnConvert.setOnClickListener(v -> {
-            Log.d(TAG, "Convert button clicked");
-            performConversion();
-        });
-        btnSwapKey.setOnClickListener(v -> swapCurrencies());
-        fabSwap.setOnClickListener(v -> swapCurrencies());
+        btnSwap.setOnClickListener(v -> swapCurrencies());
 
         layoutFromCurrency.setOnClickListener(v -> showCurrencyPicker(true));
         layoutToCurrency.setOnClickListener(v -> showCurrencyPicker(false));
+
+        // AJOUT : Bouton Paramètres
+        findViewById(R.id.btnSettings).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void appendToInput(String value) {
@@ -212,6 +212,16 @@ public class MainActivity extends AppCompatActivity {
         if (value.equals(".") && currentInput.contains(".")) {
             Log.d(TAG, "appendToInput: Decimal point already exists");
             return;
+        }
+
+        if (value.equals(",") && currentInput.contains(",")) {
+            Log.d(TAG, "appendToInput: Decimal point already exists");
+            return;
+        }
+
+        // Remplacer la virgule par un point pour les calculs
+        if (value.equals(",")) {
+            value = ".";
         }
 
         if (currentInput.equals("0") && !value.equals(".")) {

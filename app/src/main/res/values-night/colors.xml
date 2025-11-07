@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Couleurs principales (plus claires en mode sombre) -->
+    <color name="primary">#66BB6A</color>
+    <color name="primary_dark">#4CAF50</color>
+    <color name="accent">#FF7043</color>
+
+    <!-- Couleurs de fond (sombres) -->
+    <color name="background">#121212</color>
+    <color name="card_background">#1E1E1E</color>
+
+    <!-- Couleurs de texte (inversées) -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
+
+    <!-- Couleurs des boutons d'action (plus claires) -->
+    <color name="delete">#EF5350</color>
+    <color name="swap">#42A5F5</color>
+    <color name="convert">#66BB6A</color>
+
+    <!-- Couleurs de base (inversées) -->
+    <color name="white">#000000</color>
+    <color name="black">#FFFFFF</color>
+
+    <!-- Couleurs du clavier (mode sombre) -->
+    <color name="keypad_button">#2C2C2C</color>
+    <color name="keypad_button_text">#FFFFFF</color>
+</resources>

@@ -9,274 +9,351 @@
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Taux de change -->
         <TextView
             android:id="@+id/tvExchangeRate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1 USD = 0.92 EUR"
-            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:text="1 USD = 0.8216 EUR"
+            android:textAlignment="center"
             android:textColor="@color/text_secondary"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardFrom"
+        <!-- Card de conversion - Plus grande -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardConversion"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/card_background"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tvExchangeRate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <LinearLayout
-                    android:id="@+id/layoutFromCurrency"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:id="@+id/tvFromFlag"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:text="🇺🇸"
-                        android:textSize="30sp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/tvFromCurrency"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="US Dollar"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginStart="12dp"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/arrow_down_float"
-                        android:contentDescription="@string/tap_to_change"
-                        app:tint="@color/text_secondary"/>
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/etFromAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="0"
-                    android:inputType="none"
-                    android:textSize="36sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:background="@android:color/transparent"
-                    android:focusable="false"
-                    android:cursorVisible="false"
-                    android:layout_marginTop="8dp"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabSwap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_sort_by_size"
-            app:tint="@android:color/white"
-            app:backgroundTint="@color/swap"
-            app:layout_constraintTop_toBottomOf="@id/cardFrom"
-            app:layout_constraintBottom_toTopOf="@id/cardTo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/swap"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardTo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/card_background"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/fabSwap"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/tvExchangeRate">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="26dp">
 
+                <!-- Montants - Plus grands -->
                 <LinearLayout
-                    android:id="@+id/layoutToCurrency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="8dp">
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/tvToFlag"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:text="🇪🇺"
-                        android:textSize="30sp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/tvToCurrency"
+                    <EditText
+                        android:id="@+id/etFromAmount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Euro"
-                        android:textSize="16sp"
+                        android:hint="0"
+                        android:inputType="none"
+                        android:textSize="46sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
-                        android:layout_marginStart="12dp"/>
+                        android:background="@android:color/transparent"
+                        android:focusable="false"
+                        android:cursorVisible="false"
+                        android:gravity="center"/>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/arrow_down_float"
-                        android:contentDescription="@string/tap_to_change"
-                        app:tint="@color/text_secondary"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="="
+                        android:textSize="34sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"/>
+
+                    <TextView
+                        android:id="@+id/tvToAmount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:textSize="46sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary"
+                        android:gravity="center"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvToAmount"
+                <!-- Sélecteurs de devises - Plus grands -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="36sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary"
-                    android:layout_marginTop="8dp"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
+                    <!-- Devise source -->
+                    <LinearLayout
+                        android:id="@+id/layoutFromCurrency"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:id="@+id/tvFromFlag"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:text="🇺🇸"
+                            android:textSize="38sp" />
+
+                        <TextView
+                            android:id="@+id/tvFromCurrency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center"
+                            android:text="US Dollar"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/tap_to_change"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Flèche -->
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:text="⇄"
+                        android:textSize="34sp"
+                        android:textColor="@color/text_secondary"
+                        android:gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <!-- Devise cible -->
+                    <LinearLayout
+                        android:id="@+id/layoutToCurrency"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:id="@+id/tvToFlag"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:text="🇪🇺"
+                            android:textSize="38sp" />
+
+                        <TextView
+                            android:id="@+id/tvToCurrency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center"
+                            android:text="Euro"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/tap_to_change"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Clavier numérique - Remplit TOUT l'espace disponible -->
         <GridLayout
             android:id="@+id/keypadGrid"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:columnCount="4"
             android:rowCount="4"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/cardTo"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintTop_toBottomOf="@id/cardConversion"
+            app:layout_constraintBottom_toTopOf="@id/footerLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
+            <!-- Rangée 0 -->
             <Button
                 android:id="@+id/btn7"
                 style="@style/KeypadButton"
+                android:layout_row="0"
+                android:layout_column="0"
                 android:text="7" />
 
             <Button
                 android:id="@+id/btn8"
                 style="@style/KeypadButton"
+                android:layout_row="0"
+                android:layout_column="1"
                 android:text="8" />
 
             <Button
                 android:id="@+id/btn9"
                 style="@style/KeypadButton"
+                android:layout_row="0"
+                android:layout_column="2"
                 android:text="9" />
 
+            <!-- Bouton Delete - 2 rangées -->
             <Button
                 android:id="@+id/btnDelete"
                 style="@style/KeypadButtonAction"
+                android:layout_row="0"
+                android:layout_column="3"
+                android:layout_rowSpan="2"
+                android:layout_gravity="fill_vertical"
                 android:text="⌫"
+                android:textSize="32sp"
                 app:backgroundTint="@color/delete" />
 
+            <!-- Rangée 1 -->
             <Button
                 android:id="@+id/btn4"
                 style="@style/KeypadButton"
+                android:layout_row="1"
+                android:layout_column="0"
                 android:text="4" />
 
             <Button
                 android:id="@+id/btn5"
                 style="@style/KeypadButton"
+                android:layout_row="1"
+                android:layout_column="1"
                 android:text="5" />
 
             <Button
                 android:id="@+id/btn6"
                 style="@style/KeypadButton"
+                android:layout_row="1"
+                android:layout_column="2"
                 android:text="6" />
 
-            <Button
-                android:id="@+id/btnSwapKey"
-                style="@style/KeypadButtonAction"
-                android:text="⇅"
-                app:backgroundTint="@color/swap" />
-
+            <!-- Rangée 2 -->
             <Button
                 android:id="@+id/btn1"
                 style="@style/KeypadButton"
+                android:layout_row="2"
+                android:layout_column="0"
                 android:text="1" />
 
             <Button
                 android:id="@+id/btn2"
                 style="@style/KeypadButton"
+                android:layout_row="2"
+                android:layout_column="1"
                 android:text="2" />
 
             <Button
                 android:id="@+id/btn3"
                 style="@style/KeypadButton"
+                android:layout_row="2"
+                android:layout_column="2"
                 android:text="3" />
 
+            <!-- Bouton Swap - 2 rangées -->
             <Button
-                android:id="@+id/btnConvert"
+                android:id="@+id/btnSwap"
                 style="@style/KeypadButtonAction"
+                android:layout_row="2"
+                android:layout_column="3"
                 android:layout_rowSpan="2"
                 android:layout_gravity="fill_vertical"
-                android:text="="
+                android:text="⇄"
+                android:textSize="36sp"
                 app:backgroundTint="@color/convert" />
 
+            <!-- Rangée 3 -->
             <Button
                 android:id="@+id/btnDot"
                 style="@style/KeypadButton"
-                android:text="." />
+                android:layout_row="3"
+                android:layout_column="0"
+                android:text="," />
 
             <Button
                 android:id="@+id/btn0"
                 style="@style/KeypadButton"
+                android:layout_row="3"
+                android:layout_column="1"
                 android:layout_columnSpan="2"
                 android:text="0" />
         </GridLayout>
 
-        <TextView
-            android:id="@+id/tvLastUpdate"
-            android:layout_width="wrap_content"
+        <!-- Footer -->
+        <LinearLayout
+            android:id="@+id/footerLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/error_loading"
-            android:textSize="12sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/keypadGrid"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_marginBottom="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tvLastUpdate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="@string/error_loading"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/btnSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="end"
+                android:padding="10dp"
+                android:text="@string/settings"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

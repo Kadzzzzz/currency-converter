@@ -8,27 +8,27 @@ public class ExchangeRateResponse {
     private String result;
 
     @SerializedName("base_code")
-    private String baseCode;
+    private String base;
 
     @SerializedName("rates")
     private Map<String, Double> rates;
 
     @SerializedName("time_last_update_unix")
-    private long timeLastUpdateUnix;
+    private long lastUpdate;
 
     public String getResult() {
         return result;
     }
 
-    public String getBaseCode() {
-        return baseCode;
+    public String getBase() {
+        return base;
     }
 
-    public Map<String, Double> getConversionRates() {
+    public Map<String, Double> getRates() {
         return rates;
     }
 
-    public long getTimeLastUpdateUnix() {
-        return timeLastUpdateUnix;
+    public long getLastUpdate() {
+        return lastUpdate;
     }
 }

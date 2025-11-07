@@ -42,9 +42,9 @@
     <string name="french">🇫🇷 Français</string>
     <string name="english">🇬🇧 English</string>
     <string name="about">ℹ️ À propos</string>
-    <string name="about_text">Currency Converter est une application simple et élégante pour convertir rapidement des devises.\n\nL\'application utilise des taux de change en temps réel pour vous fournir des conversions précises.\n\nVersion 1.0</string>
+    <string name="about_text">Currency Converter est une application de conversion de devises.\n\nL\'application utilise des taux de change en temps réel.</string>
     <string name="data_source">📊 Source des données</string>
     <string name="data_source_desc">Les taux de change proviennent de :</string>
     <string name="data_source_link">🔗 ExchangeRate-API\n(open.er-api.com)</string>
-    <string name="data_source_info">Les taux sont mis à jour quotidiennement et proviennent de sources financières fiables.</string>
+    <string name="data_source_info">Les taux sont mis à jour quotidiennement.</string>
 </resources>

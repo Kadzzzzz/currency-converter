@@ -2,28 +2,23 @@
 <resources>
     <string name="app_name">Currency Converter</string>
 
-    <!-- Actions -->
     <string name="convert">Convert</string>
     <string name="swap">Swap</string>
     <string name="delete">Delete</string>
     <string name="clear">Clear</string>
 
-    <!-- Main interface -->
     <string name="exchange_rate">Exchange rate:</string>
     <string name="last_update">Last update: %s</string>
     <string name="tap_to_change">Tap to change</string>
     <string name="settings">⚙️ Settings</string>
 
-    <!-- Currency picker -->
     <string name="select_source_currency">Select source currency</string>
     <string name="select_target_currency">Select target currency</string>
 
-    <!-- Errors -->
     <string name="error_network">Network connection error</string>
     <string name="error_conversion">Conversion error</string>
     <string name="error_loading">Loading rates…</string>
 
-    <!-- Currencies -->
     <string name="usd">US Dollar</string>
     <string name="eur">Euro</string>
     <string name="gbp">British Pound</string>
@@ -33,7 +28,6 @@
     <string name="chf">Swiss Franc</string>
     <string name="cny">Chinese Yuan</string>
 
-    <!-- Settings Page -->
     <string name="settings_title">Settings</string>
     <string name="dark_mode">🌙 Dark Mode</string>
     <string name="dark_mode_desc">Enable dark theme</string>
@@ -42,9 +36,9 @@
     <string name="french">🇫🇷 Français</string>
     <string name="english">🇬🇧 English</string>
     <string name="about">ℹ️ About</string>
-    <string name="about_text">Currency Converter is a simple and elegant app to quickly convert currencies.\n\nThe app uses real-time exchange rates to provide you with accurate conversions.\n\nVersion 1.0</string>
+    <string name="about_text">Currency Converter is a currency conversion application. The application uses real-time exchange rates.</string>
     <string name="data_source">📊 Data Source</string>
     <string name="data_source_desc">Exchange rates come from:</string>
     <string name="data_source_link">🔗 ExchangeRate-API\n(open.er-api.com)</string>
-    <string name="data_source_info">Rates are updated daily and come from reliable financial sources.</string>
+    <string name="data_source_info">Rates are updated daily.</string>
 </resources>

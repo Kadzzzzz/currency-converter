@@ -2,7 +2,6 @@ package com.example.currency_converter;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +27,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "CurrencyConverter";
-
     private TextView tvExchangeRate, tvLastUpdate;
     private TextView tvFromFlag, tvFromCurrency, tvToFlag, tvToCurrency, tvToAmount;
     private EditText etFromAmount;
@@ -38,34 +35,27 @@ public class MainActivity extends AppCompatActivity {
     private Button btnDot, btnDelete, btnSwap;
 
     private List<Currency> currencies;
-    private Currency selectedFromCurrency;
-    private Currency selectedToCurrency;
-    private Map<String, Double> exchangeRates;
-    private String currentInput = "0";
-    private DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+    private Currency fromCurrency;
+    private Currency toCurrency;
+    private Map<String, Double> rates;
+    private String input = "0";
+    private DecimalFormat df = new DecimalFormat("#,##0.00");
     private ExchangeRateApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Appliquer les paramètres sauvegardés
         SettingsActivity.applySettings(this);
-
         setContentView(R.layout.activity_main);
-
-        Log.d(TAG, "onCreate: Starting application");
 
         initViews();
         initCurrencies();
         initApi();
-        loadExchangeRates();
+        loadRates();
         setupListeners();
     }
 
     private void initViews() {
-        Log.d(TAG, "initViews: Initializing views");
-
         tvExchangeRate = findViewById(R.id.tvExchangeRate);
         tvLastUpdate = findViewById(R.id.tvLastUpdate);
         tvFromFlag = findViewById(R.id.tvFromFlag);
@@ -91,15 +81,11 @@ public class MainActivity extends AppCompatActivity {
         btnDelete = findViewById(R.id.btnDelete);
         btnSwap = findViewById(R.id.btnSwap);
 
-        etFromAmount.setText(currentInput);
+        etFromAmount.setText(input);
         tvToAmount.setText("0");
-
-        Log.d(TAG, "initViews: Views initialized successfully");
     }
 
     private void initCurrencies() {
-        Log.d(TAG, "initCurrencies: Initializing currencies");
-
         currencies = new ArrayList<>();
         currencies.add(new Currency("USD", getString(R.string.usd), "🇺🇸"));
         currencies.add(new Currency("EUR", getString(R.string.eur), "🇪🇺"));
@@ -110,253 +96,179 @@ public class MainActivity extends AppCompatActivity {
         currencies.add(new Currency("CHF", getString(R.string.chf), "🇨🇭"));
         currencies.add(new Currency("CNY", getString(R.string.cny), "🇨🇳"));
 
-        selectedFromCurrency = currencies.get(0);
-        selectedToCurrency = currencies.get(1);
-
-        Log.d(TAG, "initCurrencies: From=" + selectedFromCurrency.getCode() +
-                ", To=" + selectedToCurrency.getCode());
-
-        updateCurrencyDisplay();
+        fromCurrency = currencies.get(0);
+        toCurrency = currencies.get(1);
+        updateDisplay();
     }
 
     private void initApi() {
-        Log.d(TAG, "initApi: Setting up Retrofit");
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://open.er-api.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ExchangeRateApi.class);
-
-        Log.d(TAG, "initApi: Retrofit ready");
     }
 
-    private void loadExchangeRates() {
-        Log.d(TAG, "loadExchangeRates: Loading rates for " + selectedFromCurrency.getCode());
-
+    private void loadRates() {
         tvLastUpdate.setText(R.string.error_loading);
 
-        api.getExchangeRates(selectedFromCurrency.getCode()).enqueue(new Callback<ExchangeRateResponse>() {
+        api.getExchangeRates(fromCurrency.getCode()).enqueue(new Callback<ExchangeRateResponse>() {
             @Override
             public void onResponse(Call<ExchangeRateResponse> call, Response<ExchangeRateResponse> response) {
-                Log.d(TAG, "onResponse: Received response, success=" + response.isSuccessful());
-
                 if (response.isSuccessful() && response.body() != null) {
-                    exchangeRates = response.body().getConversionRates();
-
-                    Log.d(TAG, "onResponse: Rates loaded, size=" +
-                            (exchangeRates != null ? exchangeRates.size() : "null"));
-
-                    if (exchangeRates != null && exchangeRates.containsKey(selectedToCurrency.getCode())) {
-                        Double rate = exchangeRates.get(selectedToCurrency.getCode());
-                        Log.d(TAG, "onResponse: Rate for " + selectedToCurrency.getCode() + " = " + rate);
-                    }
-
-                    updateExchangeRateDisplay();
+                    rates = response.body().getRates();
+                    updateRateDisplay();
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-                    String updateTime = sdf.format(new Date(response.body().getTimeLastUpdateUnix() * 1000));
-                    tvLastUpdate.setText(getString(R.string.last_update, updateTime));
+                    String time = sdf.format(new Date(response.body().getLastUpdate() * 1000));
+                    tvLastUpdate.setText(getString(R.string.last_update, time));
 
-                    performConversion();
+                    convert();
                 } else {
-                    Log.e(TAG, "onResponse: Failed - " + response.code());
                     showError(getString(R.string.error_network));
                 }
             }
 
             @Override
             public void onFailure(Call<ExchangeRateResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage(), t);
-                showError(getString(R.string.error_network) + ": " + t.getMessage());
+                showError(getString(R.string.error_network));
             }
         });
     }
 
     private void setupListeners() {
-        Log.d(TAG, "setupListeners: Setting up button listeners");
-
-        View.OnClickListener numberClickListener = v -> {
+        View.OnClickListener numberClick = v -> {
             Button btn = (Button) v;
-            appendToInput(btn.getText().toString());
+            appendInput(btn.getText().toString());
         };
 
-        btn0.setOnClickListener(numberClickListener);
-        btn1.setOnClickListener(numberClickListener);
-        btn2.setOnClickListener(numberClickListener);
-        btn3.setOnClickListener(numberClickListener);
-        btn4.setOnClickListener(numberClickListener);
-        btn5.setOnClickListener(numberClickListener);
-        btn6.setOnClickListener(numberClickListener);
-        btn7.setOnClickListener(numberClickListener);
-        btn8.setOnClickListener(numberClickListener);
-        btn9.setOnClickListener(numberClickListener);
-        btnDot.setOnClickListener(numberClickListener);
+        btn0.setOnClickListener(numberClick);
+        btn1.setOnClickListener(numberClick);
+        btn2.setOnClickListener(numberClick);
+        btn3.setOnClickListener(numberClick);
+        btn4.setOnClickListener(numberClick);
+        btn5.setOnClickListener(numberClick);
+        btn6.setOnClickListener(numberClick);
+        btn7.setOnClickListener(numberClick);
+        btn8.setOnClickListener(numberClick);
+        btn9.setOnClickListener(numberClick);
+        btnDot.setOnClickListener(numberClick);
 
-        btnDelete.setOnClickListener(v -> deleteLastCharacter());
-        btnSwap.setOnClickListener(v -> swapCurrencies());
+        btnDelete.setOnClickListener(v -> deleteChar());
+        btnSwap.setOnClickListener(v -> swap());
 
-        layoutFromCurrency.setOnClickListener(v -> showCurrencyPicker(true));
-        layoutToCurrency.setOnClickListener(v -> showCurrencyPicker(false));
+        layoutFromCurrency.setOnClickListener(v -> pickCurrency(true));
+        layoutToCurrency.setOnClickListener(v -> pickCurrency(false));
 
-        // AJOUT : Bouton Paramètres
         findViewById(R.id.btnSettings).setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         });
     }
 
-    private void appendToInput(String value) {
-        Log.d(TAG, "appendToInput: " + value + ", current=" + currentInput);
-
-        if (value.equals(".") && currentInput.contains(".")) {
-            Log.d(TAG, "appendToInput: Decimal point already exists");
+    private void appendInput(String value) {
+        if (value.equals(".") && input.contains(".")) {
             return;
         }
 
-        if (value.equals(",") && currentInput.contains(",")) {
-            Log.d(TAG, "appendToInput: Decimal point already exists");
+        if (value.equals(",") && input.contains(",")) {
             return;
         }
 
-        // Remplacer la virgule par un point pour les calculs
         if (value.equals(",")) {
             value = ".";
         }
 
-        if (currentInput.equals("0") && !value.equals(".")) {
-            currentInput = value;
+        if (input.equals("0") && !value.equals(".")) {
+            input = value;
         } else {
-            currentInput += value;
+            input += value;
         }
 
-        Log.d(TAG, "appendToInput: New input=" + currentInput);
-
-        etFromAmount.setText(currentInput);
-        performConversion();
+        etFromAmount.setText(input);
+        convert();
     }
 
-    private void deleteLastCharacter() {
-        Log.d(TAG, "deleteLastCharacter: current=" + currentInput);
-
-        if (!currentInput.isEmpty() && currentInput.length() > 1) {
-            currentInput = currentInput.substring(0, currentInput.length() - 1);
+    private void deleteChar() {
+        if (input.length() > 1) {
+            input = input.substring(0, input.length() - 1);
         } else {
-            currentInput = "0";
+            input = "0";
         }
 
-        Log.d(TAG, "deleteLastCharacter: new=" + currentInput);
-
-        etFromAmount.setText(currentInput);
-        performConversion();
+        etFromAmount.setText(input);
+        convert();
     }
 
-    private void performConversion() {
-        Log.d(TAG, "performConversion: Starting conversion");
-        Log.d(TAG, "performConversion: Input=" + currentInput);
-        Log.d(TAG, "performConversion: Rates null? " + (exchangeRates == null));
-
-        if (exchangeRates == null) {
-            Log.w(TAG, "performConversion: Exchange rates not loaded yet");
+    private void convert() {
+        if (rates == null) {
             tvToAmount.setText("0");
             return;
         }
 
         try {
-            double amount = Double.parseDouble(currentInput);
-            Log.d(TAG, "performConversion: Parsed amount=" + amount);
-
-            Double rate = exchangeRates.get(selectedToCurrency.getCode());
-            Log.d(TAG, "performConversion: Rate for " + selectedToCurrency.getCode() + " = " + rate);
+            double amount = Double.parseDouble(input);
+            Double rate = rates.get(toCurrency.getCode());
 
             if (rate != null) {
-                double result = amount * rate;
-                String formattedResult = decimalFormat.format(result);
-
-                Log.d(TAG, "performConversion: Result=" + result + ", formatted=" + formattedResult);
-
-                tvToAmount.setText(formattedResult);
-
-                Log.d(TAG, "performConversion: Display updated to: " + formattedResult);
+                tvToAmount.setText(df.format(amount * rate));
             } else {
-                Log.e(TAG, "performConversion: Rate is null for " + selectedToCurrency.getCode());
                 tvToAmount.setText("0");
                 showError(getString(R.string.error_conversion));
             }
         } catch (NumberFormatException e) {
-            Log.e(TAG, "performConversion: Parse error", e);
             tvToAmount.setText("0");
         }
     }
 
-    private void swapCurrencies() {
-        Log.d(TAG, "swapCurrencies: Swapping currencies");
+    private void swap() {
+        Currency temp = fromCurrency;
+        fromCurrency = toCurrency;
+        toCurrency = temp;
 
-        Currency temp = selectedFromCurrency;
-        selectedFromCurrency = selectedToCurrency;
-        selectedToCurrency = temp;
-
-        Log.d(TAG, "swapCurrencies: New From=" + selectedFromCurrency.getCode() +
-                ", To=" + selectedToCurrency.getCode());
-
-        updateCurrencyDisplay();
-        loadExchangeRates();
+        updateDisplay();
+        loadRates();
     }
 
-    private void updateCurrencyDisplay() {
-        Log.d(TAG, "updateCurrencyDisplay: Updating display");
-
-        tvFromFlag.setText(selectedFromCurrency.getFlag());
-        tvFromCurrency.setText(selectedFromCurrency.getName());
-        tvToFlag.setText(selectedToCurrency.getFlag());
-        tvToCurrency.setText(selectedToCurrency.getName());
-        updateExchangeRateDisplay();
+    private void updateDisplay() {
+        tvFromFlag.setText(fromCurrency.getFlag());
+        tvFromCurrency.setText(fromCurrency.getName());
+        tvToFlag.setText(toCurrency.getFlag());
+        tvToCurrency.setText(toCurrency.getName());
+        updateRateDisplay();
     }
 
-    private void updateExchangeRateDisplay() {
-        Log.d(TAG, "updateExchangeRateDisplay: Updating rate display");
-
-        if (exchangeRates != null) {
-            Double rate = exchangeRates.get(selectedToCurrency.getCode());
+    private void updateRateDisplay() {
+        if (rates != null) {
+            Double rate = rates.get(toCurrency.getCode());
             if (rate != null) {
-                String rateText = "1 " + selectedFromCurrency.getCode() + " = " +
-                        decimalFormat.format(rate) + " " + selectedToCurrency.getCode();
-                tvExchangeRate.setText(rateText);
-                Log.d(TAG, "updateExchangeRateDisplay: " + rateText);
-            } else {
-                Log.w(TAG, "updateExchangeRateDisplay: Rate is null");
+                String text = "1 " + fromCurrency.getCode() + " = " +
+                        df.format(rate) + " " + toCurrency.getCode();
+                tvExchangeRate.setText(text);
             }
-        } else {
-            Log.w(TAG, "updateExchangeRateDisplay: exchangeRates is null");
         }
     }
 
-    private void showCurrencyPicker(boolean isFromCurrency) {
-        Log.d(TAG, "showCurrencyPicker: isFrom=" + isFromCurrency);
-
-        String[] currencyNames = new String[currencies.size()];
+    private void pickCurrency(boolean isFrom) {
+        String[] names = new String[currencies.size()];
         for (int i = 0; i < currencies.size(); i++) {
-            currencyNames[i] = currencies.get(i).toString();
+            names[i] = currencies.get(i).toString();
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(isFromCurrency ? "Source" : "Destination");
-        builder.setItems(currencyNames, (dialog, which) -> {
-            if (isFromCurrency) {
-                selectedFromCurrency = currencies.get(which);
-                Log.d(TAG, "Currency changed: From=" + selectedFromCurrency.getCode());
+        builder.setTitle(isFrom ? "Source" : "Destination");
+        builder.setItems(names, (dialog, which) -> {
+            if (isFrom) {
+                fromCurrency = currencies.get(which);
             } else {
-                selectedToCurrency = currencies.get(which);
-                Log.d(TAG, "Currency changed: To=" + selectedToCurrency.getCode());
+                toCurrency = currencies.get(which);
             }
-            updateCurrencyDisplay();
-            loadExchangeRates();
+            updateDisplay();
+            loadRates();
         });
         builder.show();
     }
 
     private void showError(String message) {
-        Log.e(TAG, "showError: " + message);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         tvLastUpdate.setText(message);
     }
@@ -364,28 +276,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("currentInput", currentInput);
-        outState.putString("fromCode", selectedFromCurrency.getCode());
-        outState.putString("toCode", selectedToCurrency.getCode());
+        outState.putString("input", input);
+        outState.putString("from", fromCurrency.getCode());
+        outState.putString("to", toCurrency.getCode());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        currentInput = savedInstanceState.getString("currentInput", "0");
-        etFromAmount.setText(currentInput);
+        input = savedInstanceState.getString("input", "0");
+        etFromAmount.setText(input);
 
-        String fromCode = savedInstanceState.getString("fromCode");
-        String toCode = savedInstanceState.getString("toCode");
+        String from = savedInstanceState.getString("from");
+        String to = savedInstanceState.getString("to");
 
-        for (Currency currency : currencies) {
-            if (currency.getCode().equals(fromCode)) {
-                selectedFromCurrency = currency;
-            }
-            if (currency.getCode().equals(toCode)) {
-                selectedToCurrency = currency;
-            }
+        for (Currency c : currencies) {
+            if (c.getCode().equals(from)) fromCurrency = c;
+            if (c.getCode().equals(to)) toCurrency = c;
         }
-        updateCurrencyDisplay();
+        updateDisplay();
     }
 }

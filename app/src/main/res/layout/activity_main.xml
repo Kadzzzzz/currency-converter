@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Card de conversion - Plus grande -->
+        <!-- Card de conversion -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardConversion"
             android:layout_width="0dp"
@@ -48,7 +48,7 @@
                 android:orientation="vertical"
                 android:padding="26dp">
 
-                <!-- Montants - Plus grands -->
+                <!-- Montants -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
-                <!-- Sélecteurs de devises - Plus grands -->
+                <!-- Sélecteurs de devises -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <!-- Devise source -->
+
                     <LinearLayout
                         android:id="@+id/layoutFromCurrency"
                         android:layout_width="0dp"
@@ -140,7 +140,7 @@
                             android:textSize="10sp" />
                     </LinearLayout>
 
-                    <!-- Flèche -->
+
                     <TextView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -151,7 +151,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"/>
 
-                    <!-- Devise cible -->
+
                     <LinearLayout
                         android:id="@+id/layoutToCurrency"
                         android:layout_width="0dp"
@@ -195,7 +195,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Clavier numérique - Remplit TOUT l'espace disponible -->
+        <!-- bouttons numériques -->
         <GridLayout
             android:id="@+id/keypadGrid"
             android:layout_width="0dp"
@@ -210,7 +210,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
-            <!-- Rangée 0 -->
             <Button
                 android:id="@+id/btn7"
                 style="@style/KeypadButton"
@@ -232,7 +231,7 @@
                 android:layout_column="2"
                 android:text="9" />
 
-            <!-- Bouton Delete - 2 rangées -->
+            <!-- Bouton Delete -->
             <Button
                 android:id="@+id/btnDelete"
                 style="@style/KeypadButtonAction"
@@ -288,7 +287,7 @@
                 android:layout_column="2"
                 android:text="3" />
 
-            <!-- Bouton Swap - 2 rangées -->
+            <!-- Bouton Swap -->
             <Button
                 android:id="@+id/btnSwap"
                 style="@style/KeypadButtonAction"

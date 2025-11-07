@@ -1,4 +1,5 @@
 package com.example.currency_converter;
+
 public class Currency {
     private String code;
     private String name;
